@@ -3,7 +3,7 @@ package String::BlackWhiteList;
 use warnings;
 use strict;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use base 'Class::Accessor::Complex';
 
@@ -34,6 +34,8 @@ sub update {
 
 sub valid {
     my ($self, $s) = @_;
+
+    return 1 unless defined $s && length $s;
 
     my $white_re = $self->white_re;
     my $black_re = $self->black_re;
@@ -189,6 +191,10 @@ it is considered invalid.
 
 If the string matches neither the whitelist nor the blacklist, it is
 considered valid.
+
+Undefined values and empty strings are considered valid. This may seem
+strange, but there is no indication that they are invalid and in dubio pro
+reo.
 
 =back
 

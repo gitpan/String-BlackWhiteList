@@ -1,5 +1,8 @@
 Revision history for Perl extension String::BlackWhiteList
 
+0.02  Mi Okt 24 20:25:08 CEST 2007
+        - valid() now catches undef or zero-length strings without warnings
+
 0.01  Di Okt 23 18:03:40 CEST 2007
         - original version
 

@@ -81,6 +81,8 @@ my @ok = (
     'Postfachplatz 11',
     'PFalznerweg 91',
     'aPOSTelweg 12',
+    '',
+    undef,
     WHITELIST,
 );
 
@@ -107,6 +109,7 @@ my $matcher = String::BlackWhiteList->new(
     whitelist => [ WHITELIST ]
 )->update;
 
-ok( $matcher->valid($_), "[$_] valid")   for @ok;
+ok( $matcher->valid($_),
+    sprintf "[%s] valid", defined() ? $_ : 'undef')  for @ok;
 ok(!$matcher->valid($_), "[$_] invalid") for @not_ok;
 
