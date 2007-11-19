@@ -51,9 +51,16 @@ use constant WHITELIST => (
     'Post Allee',
     'Post Gasse',
     'Post Platz',
+    'Poststrasse',
+    'Postallee',
+    'Postgasse',
+    'Postplatz',
 );
 
-my @ok = (
+
+# those are ok both under valid() and valid_relaxed()
+
+my @basic_ok = (
     'Post Road 123',
     'Post Rd 123',
     'Post Street 123',
@@ -86,23 +93,34 @@ my @ok = (
     WHITELIST,
 );
 
-my @not_ok = (
+
+# those are not ok both under valid() and valid_relaxed()
+
+my @basic_not_ok = (
     'Box 123',
     'Pob',
     'Postbox',
     'Post',
     'Postschachtel',
-    'PO 37, Postgasse 5',
     'PF 123',
-    'P.F. 37, Post Drive 9',
-    'P.O. BOX 37, Post Drive 9',
-    'Post Street, P.O.B.',
     'Postfach 41, 1023 Wien',
-    'Post Gasse, Postlagernd',
     BLACKLIST,
 );
 
-plan tests => @ok + @not_ok;
+
+# These are not ok under valid(), but are ok under valid_relaxed().
+
+my @relaxed = (
+    'PO 37, Postgasse 5',
+    'P.F. 37, Post Drive 9',
+    'P.O. BOX 37, Post Drive 9',
+    'Post Street, P.O.B.',
+    'Post Gasse, Postlagernd',
+);
+
+
+
+plan tests => 2 * (@basic_ok + @basic_not_ok + @relaxed);
 
 my $matcher = String::BlackWhiteList->new(
     blacklist => [ BLACKLIST ],
@@ -110,6 +128,12 @@ my $matcher = String::BlackWhiteList->new(
 )->update;
 
 ok( $matcher->valid($_),
-    sprintf "[%s] valid", defined() ? $_ : 'undef')  for @ok;
-ok(!$matcher->valid($_), "[$_] invalid") for @not_ok;
+    sprintf "[%s] valid", defined() ? $_ : 'undef')  for @basic_ok;
+ok(!$matcher->valid($_), "[$_] invalid") for @basic_not_ok, @relaxed;
+
+ok( $matcher->valid_relaxed($_),
+    sprintf "[%s] valid_relaxed", defined() ? $_ : 'undef')
+    for @basic_ok, @relaxed;
+ok(!$matcher->valid_relaxed($_), "[$_] invalid even relaxed")
+    for @basic_not_ok;
 

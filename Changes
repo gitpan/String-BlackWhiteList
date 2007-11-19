@@ -1,8 +1,32 @@
-Revision history for Perl extension String::BlackWhiteList
-
-0.02  Mi Okt 24 20:25:08 CEST 2007
-        - valid() now catches undef or zero-length strings without warnings
-
-0.01  Di Okt 23 18:03:40 CEST 2007
-        - original version
-
+---
+global:
+  name: String-BlackWhiteList
+releases:
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
+      - Converted Changes file to YAML style
+      - '.shipit: added Twitter step'
+      - 'Makefile.PL: added auto_install() and process_templates()'
+      - 'lib/*: converted to template'
+      - updated MANIFEST
+      - 'added valid_relaxed(), plus docs and tests'
+      - renamed t/01all.t to t/01_strict.t
+      - added t/01_strict.t
+      - deleted t/01all.t
+      - updated MANIFEST
+    date: 2007-11-19T10:16:37Z
+    tags:
+      - NEWFEATURE
+    version: 0.03
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
+      - valid() now catches undef or zero-length strings without warnings
+    date: 2007-10-24T20:25:08+02:00
+    tags: []
+    version: 0.02
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
+      - original version
+    date: 2007-10-23T18:03:40+02:00
+    tags: []
+    version: 0.01
