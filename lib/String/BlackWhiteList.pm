@@ -3,7 +3,7 @@ package String::BlackWhiteList;
 use warnings;
 use strict;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use base 'Class::Accessor::Complex';
 
@@ -625,7 +625,7 @@ please use the C<stringblackwhitelist> tag.
 
 =head1 VERSION 
                    
-This document describes version 0.03 of L<String::BlackWhiteList>.
+This document describes version 0.04 of L<String::BlackWhiteList>.
 
 =head1 BUGS AND LIMITATIONS
 

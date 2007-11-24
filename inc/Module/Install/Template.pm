@@ -8,7 +8,7 @@ use File::Temp 'tempfile';
 use Data::Dumper;
 
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 use base qw(Module::Install::Base);

@@ -4,6 +4,15 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - set the version to 0.04
+      - added t/perlcriticrc
+      - added t/perlcriticrc
+      - updated MANIFEST
+    date: 2007-11-21T19:00:53Z
+    tags: []
+    version: 0.04
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - Converted Changes file to YAML style
       - '.shipit: added Twitter step'
       - 'Makefile.PL: added auto_install() and process_templates()'

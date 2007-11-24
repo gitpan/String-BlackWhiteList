@@ -5,7 +5,7 @@ name 'String-BlackWhiteList';
 all_from 'lib/String/BlackWhiteList.pm';
 perl_version '5.006';
 
-requires 'Class::Accessor::Complex';
+requires 'Class::Accessor::Complex' => '0.12';
 
 build_requires 'Test::More' => '0.70';
 
