@@ -2,60 +2,12 @@
 
 use warnings;
 use strict;
+
+use FindBin '$Bin';
+use lib "$Bin/lib";
+use My::Setup ':all';
+
 use Test::More;
-use String::BlackWhiteList;
-
-use constant BLACKLIST => (
-    'BOX',
-    'POB',
-    'POSTBOX',
-    'POST',
-    'POSTSCHACHTEL',
-    'PO',
-    'P O',
-    'P O BOX',
-    'P.O.',
-    'P.O.B.',
-    'P.O.BOX',
-    'P.O. BOX',
-    'P. O.',
-    'P. O.BOX',
-    'P. O. BOX',
-    'POBOX',
-    'PF',
-    'P.F.',
-    'POSTFACH',
-    'POSTLAGERND',
-    'POSTBUS'
-);
-
-use constant WHITELIST => (
-    'Post Road',
-    'Post Rd',
-    'Post Street',
-    'Post St',
-    'Post Avenue',
-    'Post Av',
-    'Post Alley',
-    'Post Drive',
-    'Post Grove',
-    'Post Walk',
-    'Post Parkway',
-    'Post Row',
-    'Post Lane',
-    'Post Bridge',
-    'Post Boulevard',
-    'Post Square',
-    'Post Garden',
-    'Post Strasse',
-    'Post Allee',
-    'Post Gasse',
-    'Post Platz',
-    'Poststrasse',
-    'Postallee',
-    'Postgasse',
-    'Postplatz',
-);
 
 
 # those are ok both under valid() and valid_relaxed()
@@ -122,18 +74,10 @@ my @relaxed = (
 
 plan tests => 2 * (@basic_ok + @basic_not_ok + @relaxed);
 
-my $matcher = String::BlackWhiteList->new(
-    blacklist => [ BLACKLIST ],
-    whitelist => [ WHITELIST ]
-)->update;
+my $matcher = get_matcher();
 
-ok( $matcher->valid($_),
-    sprintf "[%s] valid", defined() ? $_ : 'undef')  for @basic_ok;
-ok(!$matcher->valid($_), "[$_] invalid") for @basic_not_ok, @relaxed;
-
-ok( $matcher->valid_relaxed($_),
-    sprintf "[%s] valid_relaxed", defined() ? $_ : 'undef')
-    for @basic_ok, @relaxed;
-ok(!$matcher->valid_relaxed($_), "[$_] invalid even relaxed")
-    for @basic_not_ok;
+is_valid($matcher, @basic_ok);
+is_invalid($matcher, @basic_not_ok, @relaxed);
+is_valid_relaxed($matcher, @basic_ok, @relaxed);
+is_invalid_relaxed($matcher, @basic_not_ok);
 

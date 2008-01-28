@@ -4,6 +4,16 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - set the version to 0.05
+      - added is_literal_text() and tests; refactored tests
+      - updated MANIFEST
+      - added t/02_is_literal_text.t
+      - added t/lib
+    date: 2008-01-28T11:55:35Z
+    tags: []
+    version: 0.05
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - set the version to 0.04
       - added t/perlcriticrc
       - added t/perlcriticrc

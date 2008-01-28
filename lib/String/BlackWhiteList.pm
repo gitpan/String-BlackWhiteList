@@ -3,14 +3,15 @@ package String::BlackWhiteList;
 use warnings;
 use strict;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use base 'Class::Accessor::Complex';
 
 __PACKAGE__
     ->mk_new
     ->mk_scalar_accessors(qw(black_re white_re))
-    ->mk_array_accessors(qw(blacklist whitelist));
+    ->mk_array_accessors(qw(blacklist whitelist))
+    ->mk_boolean_accessors(qw(is_literal_text));
 
 
 sub update {
@@ -26,15 +27,19 @@ sub update {
         warn "[$_] is both blacklisted and whitelisted\n";
     }
 
+    my $is_literal_text = $self->is_literal_text;   # caching
+
     my $black_re =  
         sprintf '\b(%s)(\b|\s|$)',
         join '|',
+        map { $is_literal_text ? "\Q$_\E" : $_ }
         $self->blacklist;
     $self->black_re(qr/$black_re/i);
 
     my $white_re =
         sprintf '\b(%s)(\b|\s|$)',
         join '|',
+        map { $is_literal_text ? "\Q$_\E" : $_ }
         $self->whitelist;
     $self->white_re(qr/$white_re/i);
 
@@ -156,32 +161,6 @@ String::BlackWhiteList - match a string against a blacklist and a whitelist
 
 Using this class you can match strings against a blacklist and a whitelist.
 The matching algorithm is explained in the C<valid()> method's documentation.
-
-String::BlackWhiteList inherits from L<Class::Accessor::Complex>.
-
-The superclass L<Class::Accessor::Complex> defines these methods and
-functions:
-
-    carp(), cluck(), croak(), flatten(), mk_abstract_accessors(),
-    mk_array_accessors(), mk_boolean_accessors(),
-    mk_class_array_accessors(), mk_class_hash_accessors(),
-    mk_class_scalar_accessors(), mk_concat_accessors(),
-    mk_forward_accessors(), mk_hash_accessors(), mk_integer_accessors(),
-    mk_new(), mk_object_accessors(), mk_scalar_accessors(),
-    mk_set_accessors(), mk_singleton()
-
-The superclass L<Class::Accessor> defines these methods and functions:
-
-    _carp(), _croak(), _mk_accessors(), accessor_name_for(),
-    best_practice_accessor_name_for(), best_practice_mutator_name_for(),
-    follow_best_practice(), get(), make_accessor(), make_ro_accessor(),
-    make_wo_accessor(), mk_accessors(), mk_ro_accessors(),
-    mk_wo_accessors(), mutator_name_for(), set()
-
-The superclass L<Class::Accessor::Installer> defines these methods and
-functions:
-
-    install_accessor(), subname()
 
 =head1 METHODS
 
@@ -311,6 +290,12 @@ Clears the value.
 
 Deletes all elements from the array.
 
+=item clear_is_literal_text
+
+    $obj->clear_is_literal_text;
+
+Clears the boolean value by setting it to 0.
+
 =item clear_white_re
 
     $obj->clear_white_re;
@@ -357,6 +342,27 @@ If only one index is given, the corresponding array element is returned. If
 several indices are given, the result is returned as an array in list context
 or as an array reference in scalar context.
 
+=item is_literal_text
+
+    $obj->is_literal_text($value);
+    my $value = $obj->is_literal_text;
+
+If called without an argument, returns the boolean value (0 or 1). If called
+with an argument, it normalizes it to the boolean value. That is, the values
+0, undef and the empty string become 0; everything else becomes 1.
+
+=item is_literal_text_clear
+
+    $obj->is_literal_text_clear;
+
+Clears the boolean value by setting it to 0.
+
+=item is_literal_text_set
+
+    $obj->is_literal_text_set;
+
+Sets the boolean value to 1.
+
 =item pop_blacklist
 
     my $value = $obj->pop_blacklist;
@@ -388,6 +394,12 @@ Pushes elements onto the end of the array.
 Takes a list of index/value pairs and for each pair it sets the array element
 at the indicated index to the indicated value. Returns the number of elements
 that have been set.
+
+=item set_is_literal_text
+
+    $obj->set_is_literal_text;
+
+Sets the boolean value to 1.
 
 =item set_whitelist
 
@@ -582,6 +594,11 @@ Also takes the whitelist from C<whitelist()>, generates a regular expression
 that matches any string in the whitelist and sets the regular expression on
 C<white_re()>.
 
+The individual entries of C<blacklist()> and C<whitelist()> are assumed to be
+regular expressions. If you have some regular expressions and some literal
+strings, you can use C<\Q...\E>. If all your strings are literal strings, set
+C<is_literal_text()>.
+
 If you set a C<black_re()> and a C<white_re()> yourself, you shouldn't use
 <C<update()>, of course.
 
@@ -618,6 +635,31 @@ invalid. If it matches neither whitelist nor blacklist, it is valid.
 
 =back
 
+String::BlackWhiteList inherits from L<Class::Accessor::Complex>.
+
+The superclass L<Class::Accessor::Complex> defines these methods and
+functions:
+
+    mk_abstract_accessors(), mk_array_accessors(), mk_boolean_accessors(),
+    mk_class_array_accessors(), mk_class_hash_accessors(),
+    mk_class_scalar_accessors(), mk_concat_accessors(),
+    mk_forward_accessors(), mk_hash_accessors(), mk_integer_accessors(),
+    mk_new(), mk_object_accessors(), mk_scalar_accessors(),
+    mk_set_accessors(), mk_singleton()
+
+The superclass L<Class::Accessor> defines these methods and functions:
+
+    _carp(), _croak(), _mk_accessors(), accessor_name_for(),
+    best_practice_accessor_name_for(), best_practice_mutator_name_for(),
+    follow_best_practice(), get(), make_accessor(), make_ro_accessor(),
+    make_wo_accessor(), mk_accessors(), mk_ro_accessors(),
+    mk_wo_accessors(), mutator_name_for(), set()
+
+The superclass L<Class::Accessor::Installer> defines these methods and
+functions:
+
+    install_accessor()
+
 =head1 TAGS
 
 If you talk about this module in blogs, on del.icio.us or anywhere else,
@@ -625,7 +667,7 @@ please use the C<stringblackwhitelist> tag.
 
 =head1 VERSION 
                    
-This document describes version 0.04 of L<String::BlackWhiteList>.
+This document describes version 0.05 of L<String::BlackWhiteList>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -651,7 +693,7 @@ Marcel GrE<uuml>nauer, C<< <marcel@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2005-2007 by Marcel GrE<uuml>nauer
+Copyright 2005-2008 by Marcel GrE<uuml>nauer
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
