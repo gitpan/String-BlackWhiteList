@@ -75,6 +75,8 @@ my @relaxed = (
 plan tests => 2 * (@basic_ok + @basic_not_ok + @relaxed);
 
 my $matcher = get_matcher();
+$matcher->set_is_literal_text;
+$matcher->update;
 
 is_valid($matcher, @basic_ok);
 is_invalid($matcher, @basic_not_ok, @relaxed);

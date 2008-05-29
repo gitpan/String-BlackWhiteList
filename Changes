@@ -4,12 +4,22 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - "String::BlackWhiteList: don't wrap each blacklist or whitelist entry in word-delims as that may interfere with custom regexes"
+      - '.shipit: fixed svk.tagpattern'
+      - fixed black/whitelist regex construction under is_literal_text
+      - 't/01_strict.t: set_is_literal_text'
+    date: 2008-05-29T21:52:03Z
+    tags: []
+    version: 0.06
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - set the version to 0.05
       - added is_literal_text() and tests; refactored tests
       - updated MANIFEST
       - added t/02_is_literal_text.t
       - added t/lib
-    date: 2008-01-28T11:55:35Z
+      - '.shipit: fixed svk.tagpattern'
+    date: 2008-05-29T12:07:45Z
     tags: []
     version: 0.05
   - author: 'Marcel Gruenauer <marcel@cpan.org>'

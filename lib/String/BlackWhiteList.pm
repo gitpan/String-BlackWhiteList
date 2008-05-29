@@ -3,7 +3,7 @@ package String::BlackWhiteList;
 use warnings;
 use strict;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use base 'Class::Accessor::Complex';
 
@@ -30,16 +30,14 @@ sub update {
     my $is_literal_text = $self->is_literal_text;   # caching
 
     my $black_re =  
-        sprintf '\b(%s)(\b|\s|$)',
         join '|',
-        map { $is_literal_text ? "\Q$_\E" : $_ }
+        map { $is_literal_text ? '\b' . quotemeta($_) . '(\b|\s|$)' : $_ }
         $self->blacklist;
     $self->black_re(qr/$black_re/i);
 
     my $white_re =
-        sprintf '\b(%s)(\b|\s|$)',
         join '|',
-        map { $is_literal_text ? "\Q$_\E" : $_ }
+        map { $is_literal_text ? '\b' . quotemeta($_) . '(\b|\s|$)' : $_ }
         $self->whitelist;
     $self->white_re(qr/$white_re/i);
 
@@ -667,7 +665,7 @@ please use the C<stringblackwhitelist> tag.
 
 =head1 VERSION 
                    
-This document describes version 0.05 of L<String::BlackWhiteList>.
+This document describes version 0.06 of L<String::BlackWhiteList>.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -687,13 +685,13 @@ The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit <http://www.perl.com/CPAN/> to find a CPAN
 site near you. Or see <http://www.perl.com/CPAN/authors/id/M/MA/MARCEL/>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Marcel GrE<uuml>nauer, C<< <marcel@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2005-2008 by Marcel GrE<uuml>nauer
+Copyright 2005-2008 by the authors.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
