@@ -1,17 +1,12 @@
 #!/usr/bin/perl
-
 use warnings;
 use strict;
-
 use FindBin '$Bin';
 use lib "$Bin/lib";
 use My::Setup ':all';
-
 use Test::More;
 
-
 # those are ok both under valid() and valid_relaxed()
-
 my @basic_ok = (
     'Post Road 123',
     'Post Rd 123',
@@ -45,23 +40,13 @@ my @basic_ok = (
     WHITELIST,
 );
 
-
 # those are not ok both under valid() and valid_relaxed()
-
 my @basic_not_ok = (
-    'Box 123',
-    'Pob',
-    'Postbox',
-    'Post',
-    'Postschachtel',
-    'PF 123',
-    'Postfach 41, 1023 Wien',
-    BLACKLIST,
+    'Box 123',       'Pob',    'Postbox',                'Post',
+    'Postschachtel', 'PF 123', 'Postfach 41, 1023 Wien', BLACKLIST,
 );
 
-
 # These are not ok under valid(), but are ok under valid_relaxed().
-
 my @relaxed = (
     'PO 37, Postgasse 5',
     'P.F. 37, Post Drive 9',
@@ -69,17 +54,11 @@ my @relaxed = (
     'Post Street, P.O.B.',
     'Post Gasse, Postlagernd',
 );
-
-
-
 plan tests => 2 * (@basic_ok + @basic_not_ok + @relaxed);
-
 my $matcher = get_matcher();
 $matcher->set_is_literal_text;
 $matcher->update;
-
 is_valid($matcher, @basic_ok);
 is_invalid($matcher, @basic_not_ok, @relaxed);
 is_valid_relaxed($matcher, @basic_ok, @relaxed);
 is_invalid_relaxed($matcher, @basic_not_ok);
-
